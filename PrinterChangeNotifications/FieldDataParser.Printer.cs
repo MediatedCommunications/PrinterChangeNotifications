@@ -9,7 +9,7 @@ namespace PrinterChangeNotifications {
     public static partial class PrinterFieldDataParser {
 
 
-        private static Dictionary<PrinterField, FieldDataType> DataTypeCache = new Dictionary<PrinterField, FieldDataType>() {
+        private static IDictionary<PrinterField, FieldDataType> DataTypeCache = new SortedDictionary<PrinterField, FieldDataType>() {
             [PrinterField.PRINTER_NAME] = FieldDataType.String,
             [PrinterField.SHARE_NAME] = FieldDataType.String,
             [PrinterField.DRIVER_NAME] = FieldDataType.String,

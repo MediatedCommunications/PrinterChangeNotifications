@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace PrinterChangeNotifications {
     public static partial class JobFieldDataParser {
 
-        private static Dictionary<JobField, FieldDataType> DataTypeCache = new Dictionary<JobField, FieldDataType>() {
+        private static IDictionary<JobField, FieldDataType> DataTypeCache = new SortedDictionary<JobField, FieldDataType>() {
             [JobField.PRINTER_NAME] = FieldDataType.String,
             [JobField.MACHINE_NAME] = FieldDataType.String,
             [JobField.USER_NAME] = FieldDataType.String,
