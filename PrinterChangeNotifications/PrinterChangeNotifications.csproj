@@ -1,79 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{38376617-2AC9-43D0-B1C8-4D5176D18543}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>PrinterChangeNotifications</RootNamespace>
-    <AssemblyName>PrinterChangeNotifications</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <TargetFramework>net461</TargetFramework>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <AssemblyTitle>PrintTracking2</AssemblyTitle>
+    <Product>PrintTracking2</Product>
+    <Copyright>Copyright ©  2019</Copyright>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ENums\FieldDataType.cs" />
-    <Compile Include="ENums\FieldType.cs" />
-    <Compile Include="ENums\JobField.cs" />
-    <Compile Include="FieldDataParser.cs" />
-    <Compile Include="FieldDataParser.Printer.cs" />
-    <Compile Include="FieldDataTypes\JOB_STATUS.cs" />
-    <Compile Include="FieldDataTypes\PRINTER_ATTRIBUTE.cs" />
-    <Compile Include="FieldDataTypes\PRINTER_STATUS.cs" />
-    <Compile Include="FieldDataTypes\SECURITY_DESCRIPTOR.cs" />
-    <Compile Include="FieldDataTypes\SYSTEM_TIME.cs" />
-    <Compile Include="Marshal2.cs" />
-    <Compile Include="PrinterEventType.cs" />
-    <Compile Include="ENums\PrinterField.cs" />
-    <Compile Include="PrinterHardwareType.cs" />
-    <Compile Include="Printer_Notify_Info.cs" />
-    <Compile Include="Printer_Notify_Info_Data.cs" />
-    <Compile Include="Printer_Notify_Info_Flags.cs" />
-    <Compile Include="Printer_Notify_Options.cs" />
-    <Compile Include="Printer_Notify_Options_Flags.cs" />
-    <Compile Include="Printer_Notify_Options_Type.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PrintWatcher.cs" />
-    <Compile Include="Win32.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <Compile Include="FieldDataParser.Job.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
