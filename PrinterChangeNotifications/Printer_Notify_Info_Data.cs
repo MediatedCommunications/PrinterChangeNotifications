@@ -34,11 +34,12 @@ namespace PrinterChangeNotifications {
 
     [StructLayout(LayoutKind.Sequential)]
     public struct PRINTER_NOTIFY_INFO_DATA_STRING {
-        public UInt32 cbBuf;
-        public IntPtr pBuf;
+        public UInt32 BufferSize;
+        public IntPtr BufferAddress;
+
     }
 
-    [DebuggerDisplay("{DebuggerDisplay,nq}")]
+    [DebuggerDisplay(Debugger2.DebuggerDisplay)]
     public abstract class Printer_Notify_Info_Data {
         public FieldType Type { get; private set; }
         public FieldDataType DataType { get; private set; }

@@ -2,12 +2,16 @@
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <AssemblyTitle>PrintTracking2</AssemblyTitle>
-    <Product>PrintTracking2</Product>
+    <AssemblyTitle>PrinterChangeNotifications</AssemblyTitle>
+    <Product>PrinterChangeNotifications</Product>
     <Copyright>Copyright ©  2019</Copyright>
     <OutputPath>bin\</OutputPath>
     <LangVersion>latest</LangVersion>
     <DebugType>full</DebugType>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.1.0</Version>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
 </Project>

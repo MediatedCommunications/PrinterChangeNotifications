@@ -20,6 +20,10 @@ namespace PrinterChangeNotifications {
                 case FieldType.Job:
                     ret = Parse<JobField>(Item, Type, x => x.DataType());
                     break;
+                default:
+                    //Something isn't right!
+                    ret = default(Printer_Notify_Info_Data);
+                    break;
             }
 
             return ret;
@@ -113,16 +117,16 @@ namespace PrinterChangeNotifications {
 
         public static string ParseString(this PRINTER_NOTIFY_INFO_DATA This) {
             var ret = "";
-            if (This.F5_NotifyData.StringData.pBuf != IntPtr.Zero) {
-                ret = Marshal.PtrToStringAnsi(This.F5_NotifyData.StringData.pBuf);
+            if (This.F5_NotifyData.StringData.BufferAddress != IntPtr.Zero) {
+                ret = Marshal.PtrToStringAnsi(This.F5_NotifyData.StringData.BufferAddress);
             }
             return ret;
         }
 
         public static SECURITY_DESCRIPTOR ParseSecurityDescriptor(this PRINTER_NOTIFY_INFO_DATA This) {
             var ret = default(SECURITY_DESCRIPTOR);
-            if (This.F5_NotifyData.StringData.pBuf != IntPtr.Zero) {
-                ret = Marshal.PtrToStructure<SECURITY_DESCRIPTOR>(This.F5_NotifyData.StringData.pBuf);
+            if (This.F5_NotifyData.StringData.BufferAddress != IntPtr.Zero) {
+                ret = Marshal.PtrToStructure<SECURITY_DESCRIPTOR>(This.F5_NotifyData.StringData.BufferAddress);
             }
             return ret;
         }
@@ -144,8 +148,8 @@ namespace PrinterChangeNotifications {
 
         public static DateTime ParseDateTime(this PRINTER_NOTIFY_INFO_DATA This) {
             var ret = default(DateTime);
-            if(This.F5_NotifyData.StringData.pBuf != IntPtr.Zero) {
-                var tret = Marshal.PtrToStructure<SYSTEM_TIME>(This.F5_NotifyData.StringData.pBuf);
+            if(This.F5_NotifyData.StringData.BufferAddress != IntPtr.Zero) {
+                var tret = Marshal.PtrToStructure<SYSTEM_TIME>(This.F5_NotifyData.StringData.BufferAddress);
                 ret = new DateTime(tret.Year, tret.Month, tret.Day, tret.Hour, tret.Minute, tret.Second, tret.Milliseconds);
             }
 

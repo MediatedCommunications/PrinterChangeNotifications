@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -7,10 +8,18 @@ using System.Threading.Tasks;
 
 namespace PrinterChangeNotifications {
 
+    [DebuggerDisplay(Debugger2.DebuggerDisplay)]
     public class PrintWatcherEventArgs {
         public PrinterEventType Cause { get; set; }
         public Printer_Notify_Info_Flags Flags { get; set; }
         public List<Printer_Notify_Info_Data> Data { get; set; }
+
+        protected virtual string DebuggerDisplay {
+            get {
+                return $@"{Cause} {Flags} ({Data.Count} Items)";
+            }
+        }
+
     }
 
     public class PrinterEventWatcher : IDisposable {
