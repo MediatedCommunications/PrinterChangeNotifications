@@ -1,4 +1,5 @@
 ﻿using PrinterChangeNotifications.Native.DevMode;
+using PrinterChangeNotifications.Native.NotifyInfo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,40 +12,28 @@ namespace PrinterChangeNotifications.Diagnostics {
     class Program {
         static void Main(string[] args) {
             
-            var EventFilter = PrinterEventType.Job;
-            var HardwareFilter = PrinterHardwareType.All;
 
-            var JobFields = new[] {
-                JobField.PrinterName,
-                //JobField.MACHINE_NAME,
-                //JobField.PORT_NAME,
-                //JobField.USER_NAME,
-                //JobField.NOTIFY_NAME,
-                //JobField.PRINT_PROCESSOR,
-                //JobField.DRIVER_NAME,
-                //JobField.DOCUMENT,
-                //JobField.PAGES_TOTAL,
-                //JobField.PARAMETERS,
-                //JobField.DATATYPE,
-                //JobField.DEVMODE,
-            };
+            var Watcher = PrinterEventWatcher.Start(new PrintEventWatcherStartArgs() {
+                GetAllFieldsOnChange = true,
+                PrintDeviceHardwareType = PrintDeviceHardwareType.All,
 
-            var PrinterFields = new[] {
-                //PrinterField.ATTRIBUTES,
-                //PrinterField.DATATYPE,
-                //PrinterField.PARAMETERS,
-                //PrinterField.DEVMODE,
+                PrintDeviceEvents = { 
+                    //PrintDeviceEvents.Job,
+                    PrintDeviceEvents.Printer_Set
+                },
+                
+                PrintJobFields = { 
+                    PrintJobField.PrinterName,
+                    PrintJobField.DevMode,
 
-                PrinterField.ServerName,
-                PrinterField.Pages_Total,
-                PrinterField.Pages_Printed,
-                PrinterField.Bytes_Total,
-                PrinterField.Bytes_Printed,
-                PrinterField.StatusString
-            };
+                },
+                PrintDeviceFields = {
+                    PrintDeviceField.Comment,
+                    PrintDeviceField.StatusString,
+                }
 
-
-            var Watcher = PrinterEventWatcher.Start(null, EventFilter, HardwareFilter, PrinterFields, JobFields, true);
+            });
+               
 
             Watcher.EventTriggered += Watcher_EventTriggered;
 
@@ -57,21 +46,25 @@ namespace PrinterChangeNotifications.Diagnostics {
         }
 
         private static void Watcher_EventTriggered(object sender, PrintWatcherEventArgs e) {
-            Console.WriteLine($@"TRIGGERED: {e.Cause} ({e.Flags})");
+            Console.WriteLine($@"TRIGGERED: {e.Cause} (Discarded: {e.Discarded})");
+            foreach (var Device in e.PrintDevices) {
+                Console.WriteLine($@"  Print Device #{Device.Key}");
 
-            foreach (var item in e.Data) {
-                Console.WriteLine($@"  {item}");
-                if(item is IFieldValue<DevModeA> V1) {
-                    var Elements = V1.Value.ToDictionary().Values;
-
-                    foreach (var E in Elements) {
-                        Console.WriteLine($@"    {E}");
-                    }
-
+                foreach (var item in Device.Value.AllRecords()) {
+                    Console.WriteLine($@"    {item.Name} = {item.Value}");
                 }
-                
 
+                Console.WriteLine();
+            }
 
+            foreach (var Job in e.PrintJobs) {
+                Console.WriteLine($@"  Print Job #{Job.Key}");
+
+                foreach (var item in Job.Value.AllRecords()) {
+                    Console.WriteLine($@"    {item.Name} = {item.Value}");
+                }
+
+                Console.WriteLine();
             }
 
             Console.WriteLine();

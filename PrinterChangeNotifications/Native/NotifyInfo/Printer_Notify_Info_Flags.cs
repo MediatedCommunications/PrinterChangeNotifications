@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PrinterChangeNotifications {
+namespace PrinterChangeNotifications.Native.NotifyInfo {
     [Flags]
     public enum Printer_Notify_Info_Flags : uint {
         None = 0,

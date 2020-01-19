@@ -1,6 +1,8 @@
-﻿using System;
+﻿using PrinterChangeNotifications.Native;
+using PrinterChangeNotifications.Native.DevMode;
+using PrinterChangeNotifications.Native.NotifyInfo;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -8,25 +10,11 @@ using System.Threading.Tasks;
 
 namespace PrinterChangeNotifications {
 
-    [DebuggerDisplay(Debugger2.DebuggerDisplay)]
-    public class PrintWatcherEventArgs {
-        public PrinterEventType Cause { get; set; }
-        public Printer_Notify_Info_Flags Flags { get; set; }
-        public List<Printer_Notify_Info_Data> Data { get; set; }
-
-        protected virtual string DebuggerDisplay {
-            get {
-                return $@"{Cause} {Flags} ({Data.Count} Items)";
-            }
-        }
-
-    }
-
-    public class PrinterEventWatcher : IDisposable {
+    public partial class PrinterEventWatcher : IDisposable {
 
         private IntPtr PrinterHandle;
         private IntPtr EventHandle;
-        private Printer_Notify_Options Options;
+        private Printer_Notify_Options2 Options;
 
         private PrinterEventWatcher() {
 
@@ -94,18 +82,11 @@ namespace PrinterChangeNotifications {
                     return;
                 } else {
 
-                    var Success = Win32.FindNextPrinterChangeNotification(EventHandle, Options, out var Cause, out var Data);
-                    if (!Success) {
+                    if(Win32.FindNextPrinterChangeNotification(EventHandle, Options, out var Args)) { 
+                        EventTriggered?.Invoke(this, Args);
+                    } else {
                         this.Dispose();
                         throw new UnableToLoadNextPrinterEventsEventsException();
-                    } else {
-                        var Args = new PrintWatcherEventArgs() {
-                            Cause = Cause,
-                            Data = Data.Data,
-                            Flags = Data.Flags,
-                        };
-
-                        EventTriggered?.Invoke(this, Args);
                     }
 
                 }
@@ -116,30 +97,45 @@ namespace PrinterChangeNotifications {
         }
 
 
-        public static PrinterEventWatcher Start(string PrinterName, PrinterEventType EventFilter, PrinterHardwareType HardwareFilter, IEnumerable<PrinterField> PrinterFields, IEnumerable<JobField> JobFields, bool GetAllFieldsOnChange) {
-            var Opened = Win32.OpenPrinter(PrinterName, out var PrinterHandle);
-            if (!Opened) {
-                throw new UnableToOpenPrinterException(PrinterName);
+        public static PrinterEventWatcher Start(PrintEventWatcherStartArgs StartInfo) {
+            if(StartInfo == default) {
+                throw new ArgumentNullException(nameof(StartInfo));
             }
 
-            var FirstOptions = new Printer_Notify_Options() {
+            //Check to see if we asked for DevMode fields.
+            //If we did, make sure that DevMode is a field we're retreiving
+            var PrintDeviceFields = new List<PrintDeviceField>(StartInfo.PrintDeviceFields);
+            
+            var PrintJobFields = new List<PrintJobField>(StartInfo.PrintJobFields);
+            
+
+            //Determine our Event Filter
+            var PrintDeviceEvent = StartInfo.PrintDeviceEvents.Aggregate(PrintDeviceEvents.None, (x, y) => x | y);
+
+            //Open the Printer
+            var Opened = Win32.OpenPrinter(StartInfo.PrintDeviceName, out var PrinterHandle);
+            if (!Opened) {
+                throw new UnableToOpenPrinterException(StartInfo.PrintDeviceName);
+            }
+
+            var FirstOptions = new Printer_Notify_Options2() {
                 Children = {
-                    new Printer_Notify_Options_Type_Printer(PrinterFields),
-                    new Printer_Notify_Options_Type_Job(JobFields),
+                    new Printer_Notify_Options_Type_Printer(PrintDeviceFields),
+                    new Printer_Notify_Options_Type_Job(PrintJobFields),
                 }
             };
 
-            var EventHandle = Win32.FindFirstPrinterChangeNotification(PrinterHandle, EventFilter, HardwareFilter, FirstOptions);
+            var EventHandle = Win32.FindFirstPrinterChangeNotification(PrinterHandle, PrintDeviceEvent, StartInfo.PrintDeviceHardwareType, FirstOptions);
             if(EventHandle == IntPtr.Zero || EventHandle == Win32.Invalid_Handle) {
                 Win32.ClosePrinter(PrinterHandle);
-                throw new UnableToMonitorPrinterEventsException(PrinterName);
+                throw new UnableToMonitorPrinterEventsException(StartInfo.PrintDeviceName);
             }
 
-            var SecondOptions = new Printer_Notify_Options() {
-                Flags = GetAllFieldsOnChange ? Printer_Notify_Options_Flags.Refresh : Printer_Notify_Options_Flags.None,
+            var SecondOptions = new Printer_Notify_Options2() {
+                Flags = StartInfo.GetAllFieldsOnChange ? Printer_Notify_Options_Flags.Refresh : Printer_Notify_Options_Flags.None,
                 Children = {
-                    new Printer_Notify_Options_Type_Printer(PrinterFields),
-                    new Printer_Notify_Options_Type_Job(JobFields),
+                    new Printer_Notify_Options_Type_Printer(StartInfo.PrintDeviceFields),
+                    new Printer_Notify_Options_Type_Job(StartInfo.PrintJobFields),
                 }
             };
 
@@ -154,26 +150,6 @@ namespace PrinterChangeNotifications {
         }
 
 
-    }
-
-    public class PrintWatcherException : System.Exception {
-        public PrintWatcherException(string Message) : base(Message) {
-        }
-    }
-
-    public class UnableToOpenPrinterException : PrintWatcherException {
-        public UnableToOpenPrinterException(string PrinterName) : base($@"Unable to open the printer named '{PrinterName}'") {
-        }
-    }
-
-    public class UnableToMonitorPrinterEventsException : PrintWatcherException {
-        public UnableToMonitorPrinterEventsException(string PrinterName) : base($@"Unable to monitor printer events for '{PrinterName}' (call to FindFirstPrinterChangeNotification failed)") {
-        }
-    }
-
-    public class UnableToLoadNextPrinterEventsEventsException : PrintWatcherException {
-        public UnableToLoadNextPrinterEventsEventsException() : base($@"Unable to load additional printer events (call to FindNextPrinterChangeNotification failed)") {
-        }
     }
 
 }

@@ -1,3 +1,0 @@
-﻿namespace PrinterChangeNotifications.Native.DevMode {
-
-}
