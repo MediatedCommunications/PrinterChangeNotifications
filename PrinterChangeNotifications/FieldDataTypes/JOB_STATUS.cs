@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 namespace PrinterChangeNotifications {
     [Flags]
     public enum JOB_STATUS {
-        PAUSED = 1,
-        ERROR = 2,
-        DELETING = 4,
-        SPOOLING = 8,
-        PRINTING = 16,
-        OFFLINE = 32,
-        PAPEROUT = 0x40,
-        PRINTED = 0x80,
-        DELETED = 0x100,
-        BLOCKED_DEVQ = 0x200,
-        USER_INTERVENTION = 0x400,
+        Paused = 1,
+        Error = 2,
+        Deleting = 4,
+        Spooling = 8,
+        Printing = 16,
+        Offline = 32,
+        OutOfPaper = 0x40,
+        Printed = 0x80,
+        Deleted = 0x100,
+        Blocked_DevQ = 0x200,
+        UserInterventionRequired = 0x400,
     }
 }

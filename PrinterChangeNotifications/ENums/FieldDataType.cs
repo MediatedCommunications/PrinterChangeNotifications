@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace PrinterChangeNotifications {
     public enum FieldDataType {
         None,
+        NotSupported,
         String,
         StringCommaList,
         PrinterStatus,
@@ -17,9 +18,7 @@ namespace PrinterChangeNotifications {
         DateTime,
         Time,
         Duration,
-        
-
-        //DevMode,
+        DevMode,
         NotImplemented,
     }
 }
