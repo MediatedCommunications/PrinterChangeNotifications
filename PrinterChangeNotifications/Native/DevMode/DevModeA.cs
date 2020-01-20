@@ -4,15 +4,15 @@ using System.Threading.Tasks;
 
 namespace PrinterChangeNotifications.Native.DevMode {
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    [StructLayout(layoutKind: Defaults.LayoutKindDefault, CharSet = Defaults.CharSetDefault)]
     public struct DevModeA {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-        public string DeviceName;
+        public string Device_Name;
 
         public ushort DevMode_Version;
-        public ushort DriverVersion;
+        public ushort Driver_Version;
         public ushort DevMode_Size;
-        public ushort DriverExtra;
+        public ushort Driver_Extra;
         public DevModeField Fields;
         public DevModeDevice Device;
         public PrinterPalette Printer_Color;
@@ -20,6 +20,7 @@ namespace PrinterChangeNotifications.Native.DevMode {
         public short Printer_PrintQuality_Y;
         public PrinterTrueTypeFontOptions Printer_TrueTypeFontOptions;
         public PrinterCollate Printer_Collate;
+        
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string Printer_FormName;
         public ushort Display_PixelsPerLogicalInch;

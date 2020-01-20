@@ -27,18 +27,18 @@ namespace PrinterChangeNotifications {
         public static PrintJobRecord<TimeSpan> TryGetDurationRecord(this PrintJobData This, PrintJobField Field) => This.TryGetRecord<TimeSpan>(Field);
 
 
-        public static PrintJobRecord<string> PrintJob_PrinterName(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.PrinterName);
-        public static PrintJobRecord<string> PrintJob_MachineName(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.MachineName);
-        public static PrintJobRecord<string> PrintJob_UserName(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.UserName);
-        public static PrintJobRecord<string> PrintJob_NotifyName(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.NotifyName);
+        public static PrintJobRecord<string> PrintJob_PrinterName(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.Printer_Name);
+        public static PrintJobRecord<string> PrintJob_MachineName(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.Machine_Name);
+        public static PrintJobRecord<string> PrintJob_UserName(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.User_Name);
+        public static PrintJobRecord<string> PrintJob_NotifyName(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.Notify_Name);
         public static PrintJobRecord<string> PrintJob_DataType(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.DataType);
         public static PrintJobRecord<string> PrintJob_PrintProcessor(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.PrintProcessor);
         public static PrintJobRecord<string> PrintJob_Parameters(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.Parameters);
-        public static PrintJobRecord<string> PrintJob_DriverName(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.DriverName);
+        public static PrintJobRecord<string> PrintJob_DriverName(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.Driver_Name);
         public static PrintJobRecord<string> PrintJob_StatusString(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.StatusString);
         public static PrintJobRecord<string> PrintJob_Document(this PrintJobData This) => This.TryGetStringRecord(PrintJobField.Document);
 
-        public static PrintJobRecord<IReadOnlyCollection<string>> PrintJob_PortName(this PrintJobData This) => This.TryGetStringListRecord(PrintJobField.PortName);
+        public static PrintJobRecord<IReadOnlyCollection<string>> PrintJob_PortName(this PrintJobData This) => This.TryGetStringListRecord(PrintJobField.Port_Name);
 
         public static PrintJobRecord<PrintJobStatus> PrintJob_Status(this PrintJobData This) => This.TryGetRecord<PrintJobStatus>(PrintJobField.Status);
 

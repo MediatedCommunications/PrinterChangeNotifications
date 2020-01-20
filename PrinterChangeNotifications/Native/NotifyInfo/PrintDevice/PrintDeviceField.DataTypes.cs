@@ -10,9 +10,9 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
 
         public static NotifyInfoDataType DataType(this PrintDeviceField This) {
             var ret = This switch {
-                PrintDeviceField.PrinterName => NotifyInfoDataType.String,
-                PrintDeviceField.ShareName => NotifyInfoDataType.String,
-                PrintDeviceField.DriverName => NotifyInfoDataType.String,
+                PrintDeviceField.Printer_Name => NotifyInfoDataType.String,
+                PrintDeviceField.Share_Name => NotifyInfoDataType.String,
+                PrintDeviceField.Driver_Name => NotifyInfoDataType.String,
                 PrintDeviceField.Comment => NotifyInfoDataType.String,
                 PrintDeviceField.Location => NotifyInfoDataType.String,
                 PrintDeviceField.SeparatorFile => NotifyInfoDataType.String,
@@ -20,9 +20,9 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
                 PrintDeviceField.Parameters => NotifyInfoDataType.String,
                 PrintDeviceField.DataType => NotifyInfoDataType.String,
 
-                PrintDeviceField.PortName => NotifyInfoDataType.StringCommaList,
+                PrintDeviceField.Port_Name => NotifyInfoDataType.StringCommaList,
 
-                PrintDeviceField.ServerName => NotifyInfoDataType.NotSupported,
+                PrintDeviceField.Server_Name => NotifyInfoDataType.NotSupported,
                 PrintDeviceField.Pages_Total => NotifyInfoDataType.NotSupported,
                 PrintDeviceField.Pages_Printed => NotifyInfoDataType.NotSupported,
                 PrintDeviceField.Bytes_Total => NotifyInfoDataType.NotSupported,

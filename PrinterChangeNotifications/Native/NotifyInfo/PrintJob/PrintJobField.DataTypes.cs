@@ -9,18 +9,18 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
 
         public static NotifyInfoDataType DataType(this PrintJobField This) {
             var ret = This switch {
-                PrintJobField.PrinterName => NotifyInfoDataType.String,
-                PrintJobField.MachineName => NotifyInfoDataType.String,
-                PrintJobField.UserName => NotifyInfoDataType.String,
-                PrintJobField.NotifyName => NotifyInfoDataType.String,
+                PrintJobField.Printer_Name => NotifyInfoDataType.String,
+                PrintJobField.Machine_Name => NotifyInfoDataType.String,
+                PrintJobField.User_Name => NotifyInfoDataType.String,
+                PrintJobField.Notify_Name => NotifyInfoDataType.String,
                 PrintJobField.DataType => NotifyInfoDataType.String,
                 PrintJobField.PrintProcessor => NotifyInfoDataType.String,
                 PrintJobField.Parameters => NotifyInfoDataType.String,
-                PrintJobField.DriverName => NotifyInfoDataType.String,
+                PrintJobField.Driver_Name => NotifyInfoDataType.String,
                 PrintJobField.StatusString => NotifyInfoDataType.String,
                 PrintJobField.Document => NotifyInfoDataType.String,
 
-                PrintJobField.PortName => NotifyInfoDataType.StringCommaList,
+                PrintJobField.Port_Name => NotifyInfoDataType.StringCommaList,
 
                 PrintJobField.Status => NotifyInfoDataType.JobStatus,
 

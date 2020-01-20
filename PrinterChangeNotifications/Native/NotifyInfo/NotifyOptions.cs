@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 namespace PrinterChangeNotifications.Native.NotifyInfo {
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(layoutKind: Defaults.LayoutKindDefault, CharSet = Defaults.CharSetDefault)]
     public class NotifyOptions {
         public uint Version;
         public NotifyOptionsFlags Flags;

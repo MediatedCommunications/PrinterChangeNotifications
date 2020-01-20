@@ -1,7 +1,9 @@
 ﻿using PrinterChangeNotifications.Native.NotifyInfo;
+using System.Diagnostics;
 
 namespace PrinterChangeNotifications.Native.NotifyInfo {
 
+    [DebuggerDisplay(Debugger2.DebuggerDisplay)]
     public abstract class PrintDeviceRecord : IRecord, IRecordID<uint>, IRecordReserved<uint>, IRecordName<PrintDeviceField> {
 
         uint IRecordID<uint>.ID => DeviceID;
@@ -24,6 +26,9 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
         public static PrintDeviceRecord<TValue> Create<TValue>(uint DeviceID, uint Reserved, PrintDeviceField Name, TValue Value) {
             return new PrintDeviceRecord<TValue>(DeviceID, Reserved, Name, Value);
         }
+
+        protected virtual string DebuggerDisplay => IRecordExtensions.DebuggerDisplay(Name, Value);
+
     }
 
     public class PrintDeviceRecord<TValue> : PrintDeviceRecord, IRecordValue<TValue> {

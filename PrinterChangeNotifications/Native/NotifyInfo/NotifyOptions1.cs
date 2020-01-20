@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 namespace PrinterChangeNotifications.Native.NotifyInfo {
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(layoutKind: Defaults.LayoutKindDefault, CharSet = Defaults.CharSetDefault)]
     public struct NotifyOptions1 {
         public UInt16 F1_Type;
         public UInt16 F2_Reserved0;

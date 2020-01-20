@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PrinterChangeNotifications.Native.SystemTime {
-    [StructLayoutAttribute(LayoutKind.Sequential)]
+    [StructLayout(layoutKind: Defaults.LayoutKindDefault, CharSet = Defaults.CharSetDefault)]
     public struct SystemTime {
         public ushort Year;
         public ushort Month;

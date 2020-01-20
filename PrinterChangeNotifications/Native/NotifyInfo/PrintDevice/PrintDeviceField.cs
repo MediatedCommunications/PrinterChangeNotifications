@@ -2,11 +2,11 @@
 
 namespace PrinterChangeNotifications.Native.NotifyInfo {
     public enum PrintDeviceField : ushort {
-        ServerName = 0,
-        PrinterName = 1,
-        ShareName = 2,
-        PortName = 3,
-        DriverName = 4,
+        Server_Name = 0,
+        Printer_Name = 1,
+        Share_Name = 2,
+        Port_Name = 3,
+        Driver_Name = 4,
         Comment = 5,
         Location = 6,
         DevMode = 7,

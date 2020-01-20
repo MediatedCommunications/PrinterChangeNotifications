@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 
 namespace PrinterChangeNotifications.Native.NotifyInfo {
-    [StructLayout(LayoutKind.Explicit)]
+    [StructLayout(layoutKind: LayoutKind.Explicit, CharSet = Defaults.CharSetDefault)]
     public struct NotifyInfoValue {
         [FieldOffset(0)]
         public NotifyInfoValueNumeric NumericData;

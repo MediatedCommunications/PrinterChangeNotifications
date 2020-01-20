@@ -26,9 +26,9 @@ namespace PrinterChangeNotifications {
         public static PrintDeviceRecord<DateTime> TryGetDateRecord(this PrintDeviceData This, PrintDeviceField Field) => This.TryGetRecord<DateTime>(Field);
 
 
-        public static PrintDeviceRecord<string> PrintDevice_PrinterName(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.PrinterName);
-        public static PrintDeviceRecord<string> PrintDevice_ShareName(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.ShareName);
-        public static PrintDeviceRecord<string> PrintDevice_DriverName(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.DriverName);
+        public static PrintDeviceRecord<string> PrintDevice_PrinterName(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.Printer_Name);
+        public static PrintDeviceRecord<string> PrintDevice_ShareName(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.Share_Name);
+        public static PrintDeviceRecord<string> PrintDevice_DriverName(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.Driver_Name);
         public static PrintDeviceRecord<string> PrintDevice_Comment(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.Comment);
         public static PrintDeviceRecord<string> PrintDevice_Location(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.Location);
         public static PrintDeviceRecord<string> PrintDevice_SeparatorFile(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.SeparatorFile);
@@ -36,11 +36,11 @@ namespace PrinterChangeNotifications {
         public static PrintDeviceRecord<string> PrintDevice_Parameters(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.Parameters);
         public static PrintDeviceRecord<string> PrintDevice_DataType(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.DataType);
         
-        public static PrintDeviceRecord<IReadOnlyCollection<string>> PrintDevice_PortName(this PrintDeviceData This) => This.TryGetStringListRecord(PrintDeviceField.PortName);
+        public static PrintDeviceRecord<IReadOnlyCollection<string>> PrintDevice_PortName(this PrintDeviceData This) => This.TryGetStringListRecord(PrintDeviceField.Port_Name);
 
         public static PrintDeviceRecord<SecurityDescriptor> PrintDevice_SecurityDescriptor(this PrintDeviceData This) => This.TryGetRecord<SecurityDescriptor>(PrintDeviceField.SecurityDescriptor);
 
-        public static PrintDeviceRecord<string> PrintDevice_ServerName(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.ServerName);
+        public static PrintDeviceRecord<string> PrintDevice_ServerName(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.Server_Name);
         public static PrintDeviceRecord<string> PrintDevice_Pages_Total(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.Pages_Total);
         public static PrintDeviceRecord<string> PrintDevice_Pages_Printed(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.Pages_Printed);
         public static PrintDeviceRecord<string> PrintDevice_Bytes_Total(this PrintDeviceData This) => This.TryGetStringRecord(PrintDeviceField.Bytes_Total);

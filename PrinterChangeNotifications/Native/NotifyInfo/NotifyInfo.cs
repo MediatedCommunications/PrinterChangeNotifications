@@ -2,14 +2,14 @@
 using System.Runtime.InteropServices;
 
 namespace PrinterChangeNotifications.Native.NotifyInfo {
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(layoutKind: Defaults.LayoutKindDefault, CharSet = Defaults.CharSetDefault)]
     public struct NotifyInfoHeader {
         public uint Version;
         public NotifyInfoFlags Flags;
         public uint Count;
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(layoutKind: Defaults.LayoutKindDefault, CharSet = Defaults.CharSetDefault)]
     public struct NotifyInfo {
         public NotifyInfoHeader Header;
 

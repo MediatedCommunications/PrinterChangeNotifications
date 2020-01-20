@@ -1,6 +1,9 @@
 ﻿using PrinterChangeNotifications.Native.DevMode;
+using System.Diagnostics;
 
 namespace PrinterChangeNotifications.Native.DevMode {
+
+    [DebuggerDisplay(Debugger2.DebuggerDisplay)]
     public abstract class DevModeRecord : IRecord, IRecordName<DevModeField> {
         public DevModeField Name { get; private set; }
 
@@ -18,6 +21,9 @@ namespace PrinterChangeNotifications.Native.DevMode {
         public static DevModeRecord<TValue> Create<TValue>(DevModeField Name, TValue Value) {
             return new DevModeRecord<TValue>(Name, Value);
         }
+
+        protected virtual string DebuggerDisplay => IRecordExtensions.DebuggerDisplay(Name, Value);
+
     }
 
     public class DevModeRecord<TValue> : DevModeRecord, IRecordValue<TValue> {

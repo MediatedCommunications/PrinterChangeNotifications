@@ -22,12 +22,12 @@ namespace PrinterChangeNotifications.Diagnostics {
                 },
                 
                 PrintJobFields = { 
-                    PrintJobField.PrinterName,
+                    PrintJobField.Printer_Name,
                     PrintJobField.DevMode,
                 },
                 PrintDeviceFields = {
-                    PrintDeviceField.Comment,
-                    PrintDeviceField.StatusString,
+                    //PrintDeviceField.Comment,
+                    //PrintDeviceField.StatusString,
                 }
 
             });
