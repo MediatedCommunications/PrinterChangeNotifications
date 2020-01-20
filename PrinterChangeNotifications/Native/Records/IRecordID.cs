@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrinterChangeNotifications {
-
-    public interface IRecordName<TFieldName> {
-        TFieldName Name { get; }
+namespace PrinterChangeNotifications.Native {
+    public interface IRecordID<T> {
+        public T ID { get; }
     }
+
 }

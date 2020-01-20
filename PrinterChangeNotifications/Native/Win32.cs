@@ -32,7 +32,7 @@ namespace PrinterChangeNotifications.Native {
             [In()] IntPtr hPrinter,
             [In()] UInt32 fwFlags,
             [In()] UInt32 fwOptions,
-            [In(), MarshalAs(UnmanagedType.LPStruct)] PRINTER_NOTIFY_OPTIONS pPrinterNotifyOptions
+            [In(), MarshalAs(UnmanagedType.LPStruct)] NotifyOptions pPrinterNotifyOptions
             );
 
         [DllImport("winspool.drv", EntryPoint = "FindFirstPrinterChangeNotification", SetLastError = true, CharSet = CharSet.Ansi, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
@@ -64,7 +64,7 @@ namespace PrinterChangeNotifications.Native {
         public static extern bool FindNextPrinterChangeNotification(
             [In()] IntPtr hChangeObject,
             [Out()] out Int32 pdwChange,
-            [In(), MarshalAs(UnmanagedType.LPStruct)] PRINTER_NOTIFY_OPTIONS pPrinterNotifyOptions,
+            [In(), MarshalAs(UnmanagedType.LPStruct)] NotifyOptions pPrinterNotifyOptions,
             [Out()] out IntPtr lppPrinterNotifyInfo
             );
 
@@ -79,9 +79,9 @@ namespace PrinterChangeNotifications.Native {
             };
 
             if (NotifyPointer != IntPtr.Zero) {
-                var Parsed = PRINTER_NOTIFY_INFO.From(NotifyPointer);
+                var Parsed = NotifyInfo.NotifyInfo.From(NotifyPointer);
 
-                Args.Discarded = Parsed.Header.Flags.HasFlag(Printer_Notify_Info_Flags.Discarded);
+                Args.Discarded = Parsed.Header.Flags.HasFlag(NotifyInfoFlags.Discarded);
                 var AllRecords = Parsed.Data.ToRecords();
                 FreePrinterNotifyInfo(NotifyPointer);
 
@@ -96,11 +96,11 @@ namespace PrinterChangeNotifications.Native {
                             PrintDevices[V1.DeviceID] = Container;
                         }
 
-                        Container.PrintDeviceRecords[V1.Name] = V1;
+                        Container.PrintDevice_Records[V1.Name] = V1;
 
                         if (V1 is IRecordValue<DevMode.DevModeA> DM) { 
                             foreach(var item in DM.Value.ToList()) {
-                                Container.DevModeRecords[item.Name] = item;
+                                Container.DevMode_Records[item.Name] = item;
                             }
                         }
 
@@ -111,11 +111,11 @@ namespace PrinterChangeNotifications.Native {
                             PrintJobs[V2.JobID] = Container;
                         }
 
-                        Container.PrintJobRecords[V2.Name] = V2;
+                        Container.PrintJob_Records[V2.Name] = V2;
 
                         if (V2 is IRecordValue<DevMode.DevModeA> DM) {
                             foreach (var item in DM.Value.ToList()) {
-                                Container.DevModeRecords[item.Name] = item;
+                                Container.DevMode_Records[item.Name] = item;
                             }
                         }
 

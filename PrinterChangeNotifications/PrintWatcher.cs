@@ -1,4 +1,5 @@
-﻿using PrinterChangeNotifications.Native;
+﻿using PrinterChangeNotifications.Exceptions;
+using PrinterChangeNotifications.Native;
 using PrinterChangeNotifications.Native.DevMode;
 using PrinterChangeNotifications.Native.NotifyInfo;
 using System;
@@ -10,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace PrinterChangeNotifications {
 
-    public partial class PrinterEventWatcher : IDisposable {
+    public partial class PrintWatcher : IDisposable {
 
         private IntPtr PrinterHandle;
         private IntPtr EventHandle;
         private Printer_Notify_Options2 Options;
 
-        private PrinterEventWatcher() {
+        private PrintWatcher() {
 
         }
 
@@ -44,7 +45,7 @@ namespace PrinterChangeNotifications {
         }
 
 
-        ~PrinterEventWatcher() {
+        ~PrintWatcher() {
             Dispose(false);
         }
 
@@ -97,7 +98,7 @@ namespace PrinterChangeNotifications {
         }
 
 
-        public static PrinterEventWatcher Start(PrintEventWatcherStartArgs StartInfo) {
+        public static PrintWatcher Start(PrintWatcherStartArgs StartInfo) {
             if(StartInfo == default) {
                 throw new ArgumentNullException(nameof(StartInfo));
             }
@@ -120,8 +121,8 @@ namespace PrinterChangeNotifications {
 
             var FirstOptions = new Printer_Notify_Options2() {
                 Children = {
-                    new Printer_Notify_Options_Type_Printer(PrintDeviceFields),
-                    new Printer_Notify_Options_Type_Job(PrintJobFields),
+                    NotifyOptions2.From(PrintDeviceFields),
+                    NotifyOptions2.From(PrintJobFields),
                 }
             };
 
@@ -132,14 +133,14 @@ namespace PrinterChangeNotifications {
             }
 
             var SecondOptions = new Printer_Notify_Options2() {
-                Flags = StartInfo.GetAllFieldsOnChange ? Printer_Notify_Options_Flags.Refresh : Printer_Notify_Options_Flags.None,
+                Flags = StartInfo.GetAllFieldsOnChange ? NotifyOptionsFlags.Refresh : NotifyOptionsFlags.None,
                 Children = {
-                    new Printer_Notify_Options_Type_Printer(StartInfo.PrintDeviceFields),
-                    new Printer_Notify_Options_Type_Job(StartInfo.PrintJobFields),
+                    NotifyOptions2.From(PrintDeviceFields),
+                    NotifyOptions2.From(PrintJobFields),
                 }
             };
 
-            var ret = new PrinterEventWatcher() {
+            var ret = new PrintWatcher() {
                 PrinterHandle = PrinterHandle,
                 EventHandle = EventHandle,
                 Options = SecondOptions,

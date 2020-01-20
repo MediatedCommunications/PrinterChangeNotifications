@@ -1,6 +1,6 @@
 ﻿using PrinterChangeNotifications.Native.DevMode;
 
-namespace PrinterChangeNotifications {
+namespace PrinterChangeNotifications.Native.DevMode {
     public abstract class DevModeRecord : IRecord, IRecordName<DevModeField> {
         public DevModeField Name { get; private set; }
 

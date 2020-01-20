@@ -5,20 +5,20 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using PrinterChangeNotifications.Native.DevMode;
-using PrinterChangeNotifications.Native.SecurityDescriptor;
 using PrinterChangeNotifications.Native.SystemTime;
 using PrinterChangeNotifications.Native.NotifyInfo;
+using PrinterChangeNotifications.Native.Security;
 
 namespace PrinterChangeNotifications.Native.NotifyInfo {
     public static partial class FieldDataParser {
 
-        public static IEnumerable<IRecord> ToRecords(this IEnumerable<PRINTER_NOTIFY_INFO_DATA> This) {
+        public static IEnumerable<IRecord> ToRecords(this IEnumerable<NotifyInfoData> This) {
             foreach (var item in This) {
                 yield return item.ToRecord();
             }
         }
 
-        public static IRecord ToRecord(this PRINTER_NOTIFY_INFO_DATA This) {
+        public static IRecord ToRecord(this NotifyInfoData This) {
             var Type = This.F1_Type;
 
             IRecord ret = Type switch
@@ -31,7 +31,7 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
             return ret;
         }
 
-        private static PrintDeviceRecord ParsePrintDevice(PRINTER_NOTIFY_INFO_DATA Item) {
+        private static PrintDeviceRecord ParsePrintDevice(NotifyInfoData Item) {
             var Field = (PrintDeviceField)Item.F2_Field;
             var DataType = Field.DataType();
             var ID = Item.F4_Id;
@@ -41,12 +41,12 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
 
             PrintDeviceRecord ret = Value switch
             {
-                String                                  V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
+                string                                  V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
                 IReadOnlyCollection<string>             V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
-                PrintJobStatus                          V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
-                PrintDeviceAttribute                    V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
-                SecurityDescriptor.SecurityDescriptor   V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
                 uint                                    V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
+                PrintDeviceStatus                       V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
+                PrintDeviceAttribute                    V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
+                SecurityDescriptor                      V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
                 DateTime                                V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
                 TimeSpan                                V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
                 DevModeA                                V1  => PrintDeviceRecord.Create(ID, Reserved, Field, V1),
@@ -56,7 +56,7 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
             return ret;
         }
 
-        private static PrintJobRecord ParsePrintJob(PRINTER_NOTIFY_INFO_DATA Item) {
+        private static PrintJobRecord ParsePrintJob(NotifyInfoData Item) {
             var Field = (PrintJobField)Item.F2_Field;
             var DataType = Field.DataType();
             var ID = Item.F4_Id;
@@ -66,12 +66,11 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
 
             PrintJobRecord ret = Value switch
             {
-                String                                  V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
+                string                                  V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
                 IReadOnlyCollection<string>             V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
-                PrintJobStatus                          V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
-                PrintDeviceAttribute                    V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
-                SecurityDescriptor.SecurityDescriptor   V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
                 uint                                    V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
+                PrintJobStatus                          V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
+                SecurityDescriptor                      V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
                 DateTime                                V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
                 TimeSpan                                V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
                 DevModeA                                V1  => PrintJobRecord.Create(ID, Reserved, Field, V1),
@@ -83,7 +82,7 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
 
         
 
-        public static object ParseValue(this PRINTER_NOTIFY_INFO_DATA This, NotifyInfoDataType DataType) {
+        public static object ParseValue(this NotifyInfoData This, NotifyInfoDataType DataType) {
 
             object ret = DataType switch {
                 NotifyInfoDataType.None => $@"This field has no data type",
@@ -107,7 +106,7 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
             return ret;
         }
 
-        public static string ParseString(this PRINTER_NOTIFY_INFO_DATA This) {
+        private static string ParseString(this NotifyInfoData This) {
             var ret = "";
             if (This.F5_NotifyData.PointerData.Address != IntPtr.Zero) {
                 ret = Marshal.PtrToStringAnsi(This.F5_NotifyData.PointerData.Address);
@@ -115,19 +114,19 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
             return ret;
         }
 
-        public static IReadOnlyCollection<string> ParseStringCommaList(this PRINTER_NOTIFY_INFO_DATA This) {
+        private static IReadOnlyCollection<string> ParseStringCommaList(this NotifyInfoData This) {
             return new System.Collections.ObjectModel.ReadOnlyCollection<string>(This.ParseString().Split(','));
         }
 
-        public static SecurityDescriptor.SecurityDescriptor ParseSecurityDescriptor(this PRINTER_NOTIFY_INFO_DATA This) {
-            var ret = default(SecurityDescriptor.SecurityDescriptor);
+        private static SecurityDescriptor ParseSecurityDescriptor(this NotifyInfoData This) {
+            var ret = default(SecurityDescriptor);
             if (This.F5_NotifyData.PointerData.Address != IntPtr.Zero) {
-                ret = Marshal.PtrToStructure<SecurityDescriptor.SecurityDescriptor>(This.F5_NotifyData.PointerData.Address);
+                ret = Marshal.PtrToStructure<SecurityDescriptor>(This.F5_NotifyData.PointerData.Address);
             }
             return ret;
         }
 
-        public static T ParseEnum<T>(this PRINTER_NOTIFY_INFO_DATA This) where T : struct {
+        private static T ParseEnum<T>(this NotifyInfoData This) where T : struct {
             var ret = default(T);
 
             ret = (T)Enum.ToObject(typeof(T), This.F5_NotifyData.NumericData.Value1);
@@ -135,14 +134,14 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
             return ret;
         }
 
-        public static uint ParseNumber(this PRINTER_NOTIFY_INFO_DATA This) {
+        private static uint ParseNumber(this NotifyInfoData This) {
 
             var ret = This.F5_NotifyData.NumericData.Value1;
 
             return ret;
         }
 
-        public static DateTime ParseDateTime(this PRINTER_NOTIFY_INFO_DATA This) {
+        private static DateTime ParseDateTime(this NotifyInfoData This) {
             var ret = default(DateTime);
             if(This.F5_NotifyData.PointerData.Address != IntPtr.Zero) {
                 var tret = Marshal.PtrToStructure<SystemTime.SystemTime>(This.F5_NotifyData.PointerData.Address);
@@ -152,19 +151,19 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
             return ret;
         }
 
-        public static DateTime ParseTime(this PRINTER_NOTIFY_INFO_DATA This) {
+        private static DateTime ParseTime(this NotifyInfoData This) {
             var ret = default(DateTime).AddMinutes(This.F5_NotifyData.NumericData.Value1);
 
             return ret;
         }
 
-        public static TimeSpan ParseDuration(this PRINTER_NOTIFY_INFO_DATA This) {
+        private static TimeSpan ParseDuration(this NotifyInfoData This) {
             var ret = TimeSpan.FromSeconds(This.F5_NotifyData.NumericData.Value1);
 
             return ret;
         }
 
-        public static DevModeA ParseDevMode(this PRINTER_NOTIFY_INFO_DATA This) {
+        private static DevModeA ParseDevMode(this NotifyInfoData This) {
             var ret = default(DevModeA);
             if (This.F5_NotifyData.PointerData.Address != IntPtr.Zero) {
                 ret = Marshal.PtrToStructure<DevModeA>(This.F5_NotifyData.PointerData.Address);

@@ -1,5 +1,5 @@
 ﻿namespace PrinterChangeNotifications.Native.NotifyInfo {
-    public enum Printer_Notify_Options_Flags : uint {
+    public enum NotifyOptionsFlags : uint {
         None = 0,
         Refresh = 1,
     }

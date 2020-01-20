@@ -1,6 +1,6 @@
 ﻿using PrinterChangeNotifications.Native.NotifyInfo;
 
-namespace PrinterChangeNotifications {
+namespace PrinterChangeNotifications.Native.NotifyInfo {
 
     public abstract class PrintJobRecord : IRecord, IRecordID<uint>, IRecordReserved<uint>, IRecordName<PrintJobField> {
 

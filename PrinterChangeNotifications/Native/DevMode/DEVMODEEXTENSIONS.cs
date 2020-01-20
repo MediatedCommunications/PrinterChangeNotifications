@@ -25,7 +25,6 @@ namespace PrinterChangeNotifications.Native.DevMode {
                 DevModeField.Display_Orientation           => DevModeRecord.Create(Name, This.Device.Display.Orientation),
 
                 DevModeField.Printer_Collate               => DevModeRecord.Create(Name, This.Printer_Collate),
-                DevModeField.Printer_Color                 => DevModeRecord.Create(Name, This.Printer_Color),
                 DevModeField.Printer_Copies                => DevModeRecord.Create(Name, This.Device.Printer.Copies),
                 DevModeField.Printer_DefaultSource         => DevModeRecord.Create(Name, This.Device.Printer.DefaultSource),
                 DevModeField.Printer_Duplex                => DevModeRecord.Create(Name, This.Printer_Duplex),
@@ -35,6 +34,7 @@ namespace PrinterChangeNotifications.Native.DevMode {
                 DevModeField.Printer_MediaType             => DevModeRecord.Create(Name, This.Printer_MediaType),
                 DevModeField.Printer_Orientation           => DevModeRecord.Create(Name, This.Device.Printer.Orientation),
                 DevModeField.Printer_PageLayout            => DevModeRecord.Create(Name, This.DeviceFlags.Printer_PageLayout),
+                DevModeField.Printer_Palette               => DevModeRecord.Create(Name, This.Printer_Color),
                 DevModeField.Printer_Paper_Length          => DevModeRecord.Create(Name, This.Device.Printer.Paper_Length),
                 DevModeField.Printer_Paper_Size            => DevModeRecord.Create(Name, This.Device.Printer.Paper_Size),
                 DevModeField.Printer_Paper_Width           => DevModeRecord.Create(Name, This.Device.Printer.Paper_Width),

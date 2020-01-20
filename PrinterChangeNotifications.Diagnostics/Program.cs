@@ -11,9 +11,8 @@ using System.Threading.Tasks;
 namespace PrinterChangeNotifications.Diagnostics {
     class Program {
         static void Main(string[] args) {
-            
 
-            var Watcher = PrinterEventWatcher.Start(new PrintEventWatcherStartArgs() {
+            var Watcher = PrintWatcher.Start(new PrintWatcherStartArgs() {
                 GetAllFieldsOnChange = true,
                 PrintDeviceHardwareType = PrintDeviceHardwareType.All,
 
@@ -25,7 +24,6 @@ namespace PrinterChangeNotifications.Diagnostics {
                 PrintJobFields = { 
                     PrintJobField.PrinterName,
                     PrintJobField.DevMode,
-
                 },
                 PrintDeviceFields = {
                     PrintDeviceField.Comment,
@@ -53,7 +51,7 @@ namespace PrinterChangeNotifications.Diagnostics {
                 foreach (var item in Device.Value.AllRecords()) {
                     Console.WriteLine($@"    {item.Name} = {item.Value}");
                 }
-
+                
                 Console.WriteLine();
             }
 

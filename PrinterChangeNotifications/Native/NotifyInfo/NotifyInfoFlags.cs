@@ -2,7 +2,7 @@
 
 namespace PrinterChangeNotifications.Native.NotifyInfo {
     [Flags]
-    public enum Printer_Notify_Info_Flags : uint {
+    public enum NotifyInfoFlags : uint {
         None = 0,
         Discarded = 1,
     }

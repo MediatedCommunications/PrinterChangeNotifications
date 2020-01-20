@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PrinterChangeNotifications {
 
-    public class PrintEventWatcherStartArgs {
+    public class PrintWatcherStartArgs {
         public bool GetAllFieldsOnChange { get; set; }
 
         public string PrintDeviceName { get; set; }

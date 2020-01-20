@@ -1,11 +1,11 @@
-﻿namespace PrinterChangeNotifications {
+﻿namespace PrinterChangeNotifications.Native.DevMode {
     public enum DevMode_Dither : uint {
-        NONE = 1,
-        COARSE = 2,
-        FINE = 3,
-        LINEART = 4,
-        GRAYSCALE = 5,
-        USER = 256,
+        None = 1,
+        Coarse = 2,
+        Fine = 3,
+        LineArt = 4,
+        Grayscale = 5,
+        User = 256,
     }
 
 }

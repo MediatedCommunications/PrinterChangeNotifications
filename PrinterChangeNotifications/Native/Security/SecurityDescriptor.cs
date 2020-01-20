@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrinterChangeNotifications.Native.SecurityDescriptor {
+namespace PrinterChangeNotifications.Native.Security {
     [StructLayoutAttribute(LayoutKind.Sequential)]
     public struct SecurityDescriptor {
         public byte revision;

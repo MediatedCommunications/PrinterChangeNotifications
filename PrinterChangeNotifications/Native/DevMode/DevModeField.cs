@@ -16,7 +16,7 @@ namespace PrinterChangeNotifications.Native.DevMode {
         Printer_Copies                  = 0x00000100,
         Printer_DefaultSource           = 0x00000200,
         Printer_PrintQuality_X          = 0x00000400,
-        Printer_Color                   = 0x00000800,
+        Printer_Palette                 = 0x00000800,
         Printer_Duplex                  = 0x00001000,
         Printer_PrintQuality_Y          = 0x00002000,
         Printer_TrueTypeFontOptions     = 0x00004000,
