@@ -26,7 +26,7 @@ namespace PrinterChangeNotifications.Diagnostics {
                     PrintJobField.DevMode,
                 },
                 PrintDeviceFields = {
-                    //PrintDeviceField.Comment,
+                    PrintDeviceField.Comment,
                     //PrintDeviceField.StatusString,
                 }
 
@@ -61,13 +61,13 @@ namespace PrinterChangeNotifications.Diagnostics {
             Console.WriteLine($@"TRIGGERED: {e.Cause} (Discarded: {e.Discarded})");
             foreach (var Device in e.PrintDevices) {
                 Console.WriteLine($@"  Print Device #{Device.Key}");
-                ShowRecords(Device.Value.AllRecords());
+                ShowRecords(Device.Value.PrintDevice_Records.Values);
                 Console.WriteLine();
             }
 
             foreach (var Job in e.PrintJobs) {
                 Console.WriteLine($@"  Print Job #{Job.Key}");
-                ShowRecords(Job.Value.AllRecords());
+                ShowRecords(Job.Value.PrintJob_Records.Values);
                 Console.WriteLine();
             }
 

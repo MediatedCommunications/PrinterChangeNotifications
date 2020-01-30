@@ -5,6 +5,7 @@ using PrinterChangeNotifications.Native.NotifyInfo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ namespace PrinterChangeNotifications {
         }
 
 
-        private System.Threading.CancellationTokenSource TokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource TokenSource = new CancellationTokenSource();
         public void Stop() {
             TokenSource.Cancel();
         }
@@ -58,46 +59,35 @@ namespace PrinterChangeNotifications {
 
 
         public event EventHandler<PrintWatcherEventArgs> EventTriggered;
-        private System.Threading.Thread Thread;
         private void Start() {
-            Thread = new Thread(ThreadLoop);
-            Thread.Start();
-        }
 
-        private void ThreadLoop() {
-            var WaitHandle = new Microsoft.Win32.SafeHandles.SafeWaitHandle(EventHandle, false);
-
-            var Event = new ManualResetEvent(false) {
-                SafeWaitHandle = WaitHandle
+            var _mrEvent = new ManualResetEvent(false) {
+                SafeWaitHandle = new Microsoft.Win32.SafeHandles.SafeWaitHandle(EventHandle, true)
             };
 
-            while (true) {
-                var Handles = new WaitHandle[] {
-                    Event,
-                    TokenSource.Token.WaitHandle
-                };
-
-                var Index = System.Threading.WaitHandle.WaitAny(Handles);
-
-                if(Handles[Index] == TokenSource.Token.WaitHandle) {
-                    this.Dispose();
-                    return;
-                } else {
-
-                    if(Win32.FindNextPrinterChangeNotification(EventHandle, Options, out var Args)) { 
-                        EventTriggered?.Invoke(this, Args);
-                    } else {
-                        this.Dispose();
-                        throw new UnableToLoadNextPrinterEventsEventsException();
-                    }
-
-                }
-
-            }
-
-            
+            var _waitHandle = RegisterEvent(_mrEvent);
         }
 
+        private RegisteredWaitHandle RegisterEvent(ManualResetEvent _mrEvent) {
+            var _waitHandle = ThreadPool.RegisterWaitForSingleObject(_mrEvent, (_, TimedOut) => ThreadPoolCallback(TimedOut, _mrEvent), null, -1, true);
+            return _waitHandle;
+        }
+
+
+        private void ThreadPoolCallback(bool TimedOut, ManualResetEvent _mrEvent) {
+            if (!TimedOut) {
+                if (Win32.FindNextPrinterChangeNotification(EventHandle, Options, out var Args)) {
+                    EventTriggered?.Invoke(this, Args);
+                    RegisterEvent(_mrEvent);
+                }
+                else {
+                    this.Dispose();
+                    throw new UnableToLoadNextPrinterEventsEventsException();
+                }
+            }
+        }
+
+        
 
         public static PrintWatcher Start(PrintWatcherStartArgs StartInfo) {
             if(StartInfo == default) {
@@ -105,7 +95,7 @@ namespace PrinterChangeNotifications {
             }
 
             //Check to see if we asked for DevMode fields.
-            //If we did, make sure that DevMode is a field we're retreiving
+            //If we did, make sure that DevMode is a field we're retrieving
             var PrintDeviceFields = new List<PrintDeviceField>(StartInfo.PrintDeviceFields);
             
             var PrintJobFields = new List<PrintJobField>(StartInfo.PrintJobFields);

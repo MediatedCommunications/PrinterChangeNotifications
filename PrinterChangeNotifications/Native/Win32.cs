@@ -82,7 +82,8 @@ namespace PrinterChangeNotifications.Native {
                 var Parsed = NotifyInfo.NotifyInfo.From(NotifyPointer);
 
                 Args.Discarded = Parsed.Header.Flags.HasFlag(NotifyInfoFlags.Discarded);
-                var AllRecords = Parsed.Data.ToRecords();
+                //We must call ToList because that forces enumeration.
+                var AllRecords = Parsed.Data.ToRecords().ToList();
                 FreePrinterNotifyInfo(NotifyPointer);
 
 
