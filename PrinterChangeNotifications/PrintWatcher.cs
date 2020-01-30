@@ -67,8 +67,9 @@ namespace PrinterChangeNotifications {
         private void ThreadLoop() {
             var WaitHandle = new Microsoft.Win32.SafeHandles.SafeWaitHandle(EventHandle, false);
 
-            var Event = new ManualResetEvent(false);
-            Event.SafeWaitHandle = WaitHandle;
+            var Event = new ManualResetEvent(false) {
+                SafeWaitHandle = WaitHandle
+            };
 
             while (true) {
                 var Handles = new WaitHandle[] {
