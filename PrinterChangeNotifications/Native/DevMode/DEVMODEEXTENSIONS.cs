@@ -49,7 +49,7 @@ namespace PrinterChangeNotifications.Native.DevMode {
             return ret;
         }
 
-        public static List<DevModeRecord> ToList(this DevModeA This) {
+        public static List<DevModeRecord> AllRecords(this DevModeA This) {
             var ret = (
                 from x in Enum.GetValues(typeof(DevModeField)).OfType<DevModeField>()
                 where This.Fields.HasFlag(x)
@@ -61,8 +61,8 @@ namespace PrinterChangeNotifications.Native.DevMode {
             return ret;
         }
 
-        public static IDictionary<DevModeField, DevModeRecord> ToDictionary(this DevModeA This) {
-            var ret = This.ToList().ToDictionary(x => x.Name, x => x);
+        public static IDictionary<DevModeField, DevModeRecord> AllRecordsDictionary(this DevModeA This) {
+            var ret = This.AllRecords().ToDictionary(x => x.Name, x => x);
             return ret;
         }
     }

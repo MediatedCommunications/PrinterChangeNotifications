@@ -99,7 +99,7 @@ namespace PrinterChangeNotifications.Native {
                         Container.PrintDevice_Records[V1.Name] = V1;
 
                         if (V1 is IRecordValue<DevMode.DevModeA> DM) { 
-                            foreach(var item in DM.Value.ToList()) {
+                            foreach(var item in DM.Value.AllRecords()) {
                                 Container.DevMode_Records[item.Name] = item;
                             }
                         }
@@ -114,7 +114,7 @@ namespace PrinterChangeNotifications.Native {
                         Container.PrintJob_Records[V2.Name] = V2;
 
                         if (V2 is IRecordValue<DevMode.DevModeA> DM) {
-                            foreach (var item in DM.Value.ToList()) {
+                            foreach (var item in DM.Value.AllRecords()) {
                                 Container.DevMode_Records[item.Name] = item;
                             }
                         }

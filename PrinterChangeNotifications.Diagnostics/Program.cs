@@ -43,25 +43,31 @@ namespace PrinterChangeNotifications.Diagnostics {
             Console.ReadLine();
         }
 
+
+        private static void ShowRecords(IEnumerable<Native.IRecord> Records) {
+            foreach (var item in Records) {
+                Console.WriteLine($@"    {item.Name} = {item.Value}");
+
+
+                if (item.Value is DevModeA DMA) {
+                    foreach (var DMR in DMA.AllRecords()) {
+                        Console.WriteLine($@"      {DMR.Name} = {DMR.Value}");
+                    }
+                }
+            }
+        }
+
         private static void Watcher_EventTriggered(object sender, PrintWatcherEventArgs e) {
             Console.WriteLine($@"TRIGGERED: {e.Cause} (Discarded: {e.Discarded})");
             foreach (var Device in e.PrintDevices) {
                 Console.WriteLine($@"  Print Device #{Device.Key}");
-
-                foreach (var item in Device.Value.AllRecords()) {
-                    Console.WriteLine($@"    {item.Name} = {item.Value}");
-                }
-                
+                ShowRecords(Device.Value.AllRecords());
                 Console.WriteLine();
             }
 
             foreach (var Job in e.PrintJobs) {
                 Console.WriteLine($@"  Print Job #{Job.Key}");
-
-                foreach (var item in Job.Value.AllRecords()) {
-                    Console.WriteLine($@"    {item.Name} = {item.Value}");
-                }
-
+                ShowRecords(Job.Value.AllRecords());
                 Console.WriteLine();
             }
 
