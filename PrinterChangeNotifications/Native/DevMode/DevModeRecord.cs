@@ -22,7 +22,7 @@ namespace PrinterChangeNotifications.Native.DevMode {
             return new DevModeRecord<TValue>(Name, Value);
         }
 
-        protected virtual string DebuggerDisplay => IRecordExtensions.DebuggerDisplay(Name, Value);
+        protected virtual string GetDebuggerDisplay() => IRecordExtensions.GetDebuggerDisplay(Name, Value);
 
     }
 

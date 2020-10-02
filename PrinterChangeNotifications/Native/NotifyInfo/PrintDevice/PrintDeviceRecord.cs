@@ -27,7 +27,7 @@ namespace PrinterChangeNotifications.Native.NotifyInfo {
             return new PrintDeviceRecord<TValue>(DeviceID, Reserved, Name, Value);
         }
 
-        protected virtual string DebuggerDisplay => IRecordExtensions.DebuggerDisplay(Name, Value);
+        protected virtual string GetDebuggerDisplay() => IRecordExtensions.GetDebuggerDisplay(Name, Value);
 
     }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace PrinterChangeNotifications.Diagnostics {
@@ -18,7 +19,7 @@ namespace PrinterChangeNotifications.Diagnostics {
 
                 PrintDeviceEvents = { 
                     //PrintDeviceEvents.Job,
-                    PrintDeviceEvents.Printer_Set
+                    PrintDeviceEvents.Job_Delete,
                 },
                 
                 PrintJobFields = { 
@@ -31,13 +32,12 @@ namespace PrinterChangeNotifications.Diagnostics {
                 }
 
             });
-               
-
-            Watcher.EventTriggered += Watcher_EventTriggered;
+            var Runner = Task.Run(() => ShowEvents(Watcher.Events));
 
             Console.WriteLine("Press any key to stop the watcher");
             Console.ReadLine();
-            Watcher.Stop();
+
+            Watcher.Dispose();
 
             Console.WriteLine("Press any key to exit");
             Console.ReadLine();
@@ -57,7 +57,19 @@ namespace PrinterChangeNotifications.Diagnostics {
             }
         }
 
-        private static void Watcher_EventTriggered(object sender, PrintWatcherEventArgs e) {
+
+        private static async Task ShowEvents(ChannelReader<PrintWatcherEventArgs> Events) { 
+
+            while(await Events.WaitToReadAsync()) {
+                while (Events.TryRead(out var Item)) {
+                    ShowEvents(Item);
+                }
+            }
+
+        
+        }
+
+        private static void ShowEvents(PrintWatcherEventArgs e) {
             Console.WriteLine($@"TRIGGERED: {e.Cause} (Discarded: {e.Discarded})");
             foreach (var Device in e.PrintDevices) {
                 Console.WriteLine($@"  Print Device #{Device.Key}");

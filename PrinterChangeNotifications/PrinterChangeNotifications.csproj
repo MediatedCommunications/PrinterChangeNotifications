@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <AssemblyTitle>PrinterChangeNotifications</AssemblyTitle>
     <Product>PrinterChangeNotifications</Product>
@@ -13,5 +13,8 @@
     <Version>1.1.0</Version>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Threading.Channels" Version="4.7.1" />
+  </ItemGroup>
 
 </Project>

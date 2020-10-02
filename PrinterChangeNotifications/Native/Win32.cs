@@ -74,21 +74,22 @@ namespace PrinterChangeNotifications.Native {
             var ret = FindNextPrinterChangeNotification(Arg1, out var ICause, Arg3, out var NotifyPointer);
             Allocated.Free();
 
-            Args = new PrintWatcherEventArgs() {
-                Cause = (PrintDeviceEvents)ICause
-            };
+            var Cause = (PrintDeviceEvents)ICause;
+            var Discarded = false;
+
+            var PrintDevices = new Dictionary<uint, PrintDeviceData>();
+            var PrintJobs = new Dictionary<uint, PrintJobData>();
 
             if (NotifyPointer != IntPtr.Zero) {
                 var Parsed = NotifyInfo.NotifyInfo.From(NotifyPointer);
 
-                Args.Discarded = Parsed.Header.Flags.HasFlag(NotifyInfoFlags.Discarded);
+                Discarded = Parsed.Header.Flags.HasFlag(NotifyInfoFlags.Discarded);
                 //We must call ToList because that forces enumeration.
                 var AllRecords = Parsed.Data.ToRecords().ToList();
                 FreePrinterNotifyInfo(NotifyPointer);
 
 
-                var PrintDevices = Args.PrintDevices;
-                var PrintJobs = Args.PrintJobs;
+
 
                 foreach (var Record in AllRecords) {
                     if(Record is PrintDeviceRecord V1) {
@@ -127,6 +128,8 @@ namespace PrinterChangeNotifications.Native {
                 
 
             }
+
+            Args = new PrintWatcherEventArgs(Cause, Discarded, PrintDevices, PrintJobs);
 
             return ret;
         }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace PrinterChangeNotifications {
@@ -29,20 +30,24 @@ namespace PrinterChangeNotifications {
         }
 
         private void Dispose(bool Disposing) {
-            if (Disposed) {
-                return;
+            lock (this) {
+                if (Disposed) {
+                    return;
+                }
+
+                Disposed = true;
             }
-                
 
             if (Disposing) {
-                // Free any other managed objects here.
-                //
+                Writer.Complete();
             }
 
-            Stop();
-            Win32.ClosePrinter(PrinterHandle);
-            Win32.FindClosePrinterChangeNotification(EventHandle);
-            Disposed = true;
+            var OldHandle = PrinterHandle;
+            PrinterHandle = default;
+
+            Win32.ClosePrinter(OldHandle);
+            Win32.FindClosePrinterChangeNotification(OldHandle);
+            
         }
 
 
@@ -50,22 +55,17 @@ namespace PrinterChangeNotifications {
             Dispose(false);
         }
 
+        public ChannelReader<PrintWatcherEventArgs> Events { get; private set; }
+        private ChannelWriter<PrintWatcherEventArgs> Writer { get; set; }
 
-        private readonly CancellationTokenSource TokenSource = new CancellationTokenSource();
-        public void Stop() {
-            TokenSource.Cancel();
-        }
-
-
-
-        public event EventHandler<PrintWatcherEventArgs> EventTriggered;
         private void Start() {
 
             var _mrEvent = new ManualResetEvent(false) {
-                SafeWaitHandle = new Microsoft.Win32.SafeHandles.SafeWaitHandle(EventHandle, true)
+                SafeWaitHandle = new Microsoft.Win32.SafeHandles.SafeWaitHandle(EventHandle, false)
             };
 
             var _waitHandle = RegisterEvent(_mrEvent);
+            
         }
 
         private RegisteredWaitHandle RegisterEvent(ManualResetEvent _mrEvent) {
@@ -77,12 +77,13 @@ namespace PrinterChangeNotifications {
         private void ThreadPoolCallback(bool TimedOut, ManualResetEvent _mrEvent) {
             if (!TimedOut) {
                 if (Win32.FindNextPrinterChangeNotification(EventHandle, Options, out var Args)) {
-                    EventTriggered?.Invoke(this, Args);
+                    
+                    Writer.TryWrite(Args);
+
                     RegisterEvent(_mrEvent);
                 }
                 else {
                     this.Dispose();
-                    throw new UnableToLoadNextPrinterEventsEventsException();
                 }
             }
         }
@@ -131,10 +132,17 @@ namespace PrinterChangeNotifications {
                 }
             };
 
+            var Channels = Channel.CreateUnbounded<PrintWatcherEventArgs>(new UnboundedChannelOptions() {
+                SingleReader = false,
+                SingleWriter = false,
+            });
+
             var ret = new PrintWatcher() {
                 PrinterHandle = PrinterHandle,
                 EventHandle = EventHandle,
                 Options = SecondOptions,
+                Writer = Channels.Writer,
+                Events = Channels.Reader,
             };
             ret.Start();
 

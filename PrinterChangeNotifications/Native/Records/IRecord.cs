@@ -10,7 +10,7 @@ namespace PrinterChangeNotifications.Native {
     }
 
     public static class IRecordExtensions {
-        public static string DebuggerDisplay(object Name, object Value) {
+        public static string GetDebuggerDisplay(object Name, object Value) {
             var NameText = Name.ToString();
 
             var ValueText = Value switch {
